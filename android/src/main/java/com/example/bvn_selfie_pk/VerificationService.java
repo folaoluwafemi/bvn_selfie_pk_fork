@@ -227,12 +227,6 @@ public class VerificationService implements ImageAnalysis.Analyzer {
                     takePhoto();
                 }
             }
-            if (checkSmileAndBlink(face)) {
-                if (step == 2) {
-                    step = -1;
-                    takePhoto();
-                }
-            }
 
 
         }
