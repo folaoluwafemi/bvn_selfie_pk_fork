@@ -11,13 +11,14 @@ class BvnSelfieView extends StatefulWidget {
 
   final Color? textColor;
 
-  const BvnSelfieView(
-      {super.key,
-      required this.onImageCapture,
-      required this.onError,
-      this.textColor,
-      required this.allowTakePhoto,
-      required this.onInit});
+  const BvnSelfieView({
+    super.key,
+    required this.onImageCapture,
+    required this.onError,
+    this.textColor,
+    required this.allowTakePhoto,
+    required this.onInit,
+  });
 
   @override
   State<BvnSelfieView> createState() => _BvnSelfieViewState();
@@ -33,6 +34,7 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
 
   Color surfaceColor = Colors.red;
   int? textureId;
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 15), () {
@@ -138,10 +140,10 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
               height: size.width * 0.76,
               width: size.width * 0.76,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: textureId != null
-                      ? Colors.transparent
-                      : Colors.transparent),
+                shape: BoxShape.circle,
+                color:
+                    textureId != null ? Colors.transparent : Colors.transparent,
+              ),
               child: CircularProgressIndicator(
                 color: surfaceColor != Colors.transparent
                     ? Colors.transparent
@@ -159,15 +161,15 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
                     height: size.width * 0.74,
                     width: size.width * 0.74,
                     child: AspectRatio(
-                        aspectRatio: size.width / (size.width * 1.9),
-                        child: defaultTargetPlatform == TargetPlatform.android
-                            ? Texture(textureId: textureId!)
-                            : UiKitView(
-                                viewType: "bvnview_cam",
-                                creationParams: creationParams,
-                                creationParamsCodec:
-                                    const StandardMessageCodec(),
-                              )),
+                      aspectRatio: size.width / (size.width * 1.9),
+                      child: defaultTargetPlatform == TargetPlatform.android
+                          ? Texture(textureId: textureId!)
+                          : UiKitView(
+                              viewType: "bvnview_cam",
+                              creationParams: creationParams,
+                              creationParamsCodec: const StandardMessageCodec(),
+                            ),
+                    ),
                   ),
                 ),
               ),
@@ -193,37 +195,36 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
                 enabled &&
                 TargetPlatform.android == defaultTargetPlatform) ...[
               Positioned(
-                  bottom: size.height * 0.14,
-                  child: GestureDetector(
-                    onTap: () {
-                      instance.takePhoto();
-                    },
-                    child: Column(
-                      children: [
-                        Container(
+                bottom: size.height * 0.14,
+                child: GestureDetector(
+                  onTap: () {
+                    instance.takePhoto();
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 54,
+                        padding: const EdgeInsets.all(3),
+                        width: 54,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xff5724A6),
+                        ),
+                        child: Container(
                           height: 54,
-                          padding: const EdgeInsets.all(3),
                           width: 54,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Color(0xff5724A6),
-                          ),
-                          child: Container(
-                            height: 54,
-                            width: 54,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
+                            color: Colors.white,
                           ),
                         ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text("You Can Take Shot Now...")
-                      ],
-                    ),
-                  )),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text("You Can Take Shot Now...")
+                    ],
+                  ),
+                ),
+              ),
             ]
           ],
         ),
@@ -234,6 +235,7 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
   @override
   void dispose() {
     _animationController.dispose();
+    instance.destroyer();
     super.dispose();
   }
 }

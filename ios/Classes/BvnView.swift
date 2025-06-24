@@ -59,7 +59,7 @@ class BvnView:NSObject,FlutterPlatformView,AVCaptureVideoDataOutputSampleBufferD
             if(call.method==Helpers.takePhoto){
                 self.takePhoto()
             }
-            if(call.method=="destroyer"){
+            if(call.method== "destroyer"){
                 self.dispose();
             }
             result(true)

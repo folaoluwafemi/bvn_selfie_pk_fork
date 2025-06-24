@@ -221,7 +221,8 @@ public class VerificationService implements ImageAnalysis.Analyzer {
 
                 if (checkSmileAndBlink(face)) {
                     if (step == 2) {
-                        step = -1;
+                        step = 3;
+                        callbacks.actionCallBack(Helps.NEUTRAL_FACE_ACTION);
                     }
                 }
             }
