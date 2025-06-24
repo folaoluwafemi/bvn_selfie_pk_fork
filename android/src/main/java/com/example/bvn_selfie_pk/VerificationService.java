@@ -199,14 +199,9 @@ public class VerificationService implements ImageAnalysis.Analyzer {
             return;
         }
         for (Face face : faces) {
-            //Rect bounds = face.getBoundingBox();
-//            if(bounds.width()<(getDisplay().widthPixels*0.45)){
-//                callbacks.gestureCallBack(Helps.facialGesture,Helps.NO_FACE_DETECTED);
-//                break;
-//            }
             callbacks.gestureCallBack(Helps.facialGesture, Helps.FACE_DETECTED);
 
-            //detection steps 1
+            // Step 1: Head rotation
             if (step == 1) {
                 callbacks.actionCallBack(Helps.ROTATE_HEAD);
                 if (rotateHead(face)) {
@@ -219,16 +214,28 @@ public class VerificationService implements ImageAnalysis.Analyzer {
                 callbacks.onProgressChanged(counter);
                 return;
             }
-            callbacks.actionCallBack(Helps.SMILE_AND_OPEN_ACTION);
 
-            if (checkSmileAndBlink(face)) {
-                if (step == 2) {
-                    step = -1;
-                    takePhoto();
+            // Step 2: Smile detection
+            if (step == 2) {
+                callbacks.actionCallBack(Helps.SMILE_AND_OPEN_ACTION);
+
+                if (checkSmileAndBlink(face)) {
+                    if (step == 2) {
+                        step = -1;
+                    }
                 }
             }
 
 
+            // Step 3: Neutral face detection
+            if (step == 3) {
+                callbacks.actionCallBack(Helps.NEUTRAL_FACE_ACTION);
+                if (checkNeutralFace(face)) {
+                    step = -1;
+                    takePhoto();
+                }
+                return;
+            }
         }
 
     }
@@ -250,6 +257,19 @@ public class VerificationService implements ImageAnalysis.Analyzer {
                         callbacks.onError(exception.toString());
                     }
                 });
+    }
+
+    private boolean checkNeutralFace(Face face) {
+        if (face.getSmilingProbability() != null) {
+            float smileProb = face.getSmilingProbability();
+
+            // Consider a face neutral when smiling probability is low
+            // but not extremely low (which might be a frown)
+            if (smileProb >= 0.1 && smileProb <= 0.3) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean checkSmileAndBlink(Face face) {
