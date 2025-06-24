@@ -15,4 +15,6 @@ public class Helps {
     static int ROTATE_HEAD=4;
     static int SMILE_AND_OPEN_ACTION=5;
     static int STOP_SMILE_ACTION=6;
+    // Add new constant
+    static int NEUTRAL_FACE_ACTION=7;
 }

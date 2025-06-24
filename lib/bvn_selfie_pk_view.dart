@@ -89,6 +89,13 @@ class _BvnSelfieViewState extends State<BvnSelfieView>
           }
           setState(() {});
         }
+        if (recongnitionType == RecongnitionType.NEUTRAL_FACE) {
+          if (mounted) {
+            actionText = "KEEP A NEUTRAL EXPRESSION";
+          }
+          setState(() {});
+          return;
+        }
       },
       onImageCapture: widget.onImageCapture,
       onError: widget.onError,

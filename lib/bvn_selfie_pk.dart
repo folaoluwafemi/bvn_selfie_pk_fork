@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class BvnServiceProvider {
   final BvnServiceProviderController controller;
   static const _methodChannel = MethodChannel('bvn_selfie_pk');
+
   BvnServiceProvider({required this.controller}) {
     _methodChannel.setMethodCallHandler((call) async {
       if (call.method == "showTextureView") {
@@ -38,7 +39,11 @@ class BvnServiceProvider {
                     ? RecongnitionType.CLOSE_AND_OPEN_SLOWLY
                     : actionType == 4
                         ? RecongnitionType.HEAD_ROTATE
-                        : RecongnitionType.SMILE_AND_OPEN_ONLY);
+                        : actionType == 5
+                            ? RecongnitionType.SMILE_AND_OPEN_ONLY
+                            : actionType == 7
+                                ? RecongnitionType.NEUTRAL_FACE
+                                : RecongnitionType.SMILE_AND_OPEN_ONLY);
         return;
       }
     });
@@ -73,6 +78,7 @@ class BvnServiceProviderController {
   final Function(String) onImageCapture;
   final Function(int) onProgressChange;
   final Function(BvnServiceProvider) onInit;
+
   BvnServiceProviderController(
       {required this.onTextureCreated,
       required this.onError,
@@ -90,5 +96,6 @@ enum RecongnitionType {
   FROWN_ONLY,
   CLOSE_AND_OPEN_SLOWLY,
   HEAD_ROTATE,
-  SMILE_AND_OPEN_ONLY
+  SMILE_AND_OPEN_ONLY,
+  NEUTRAL_FACE
 }
