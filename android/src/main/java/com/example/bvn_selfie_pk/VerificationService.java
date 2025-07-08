@@ -263,10 +263,13 @@ public class VerificationService implements ImageAnalysis.Analyzer {
     private boolean checkNeutralFace(Face face) {
         if (face.getSmilingProbability() != null) {
             float smileProb = face.getSmilingProbability();
+            float rightEyeOpenProb = face.getRightEyeOpenProbability();
+            float leftEyeOpenProb = face.getLeftEyeOpenProbability();
 
             // Consider a face neutral when smiling probability is low
             // but not extremely low (which might be a frown)
-            if (smileProb >= 0.1 && smileProb <= 0.3) {
+            // while both eyes are open
+            if (smileProb >= 0.01 && smileProb <= 0.1 && leftEyeOpenProb > 0.5 && rightEyeOpenProb > 0.5) {
                 return true;
             }
         }
@@ -278,7 +281,8 @@ public class VerificationService implements ImageAnalysis.Analyzer {
         if (face.getSmilingProbability() != null && face.getRightEyeOpenProbability() != null) {
             float smileProb = face.getSmilingProbability();
             float rightEyeOpenProb = face.getRightEyeOpenProbability();
-            if (smileProb > 0.55) {
+            float leftEyeOpenProb = face.getLeftEyeOpenProbability();
+            if (smileProb > 0.7 && leftEyeOpenProb > 0.5 && rightEyeOpenProb > 0.5) {
                 return true;
             }
         }
@@ -333,5 +337,4 @@ public class VerificationService implements ImageAnalysis.Analyzer {
             //  surfaceTexture.detachFromGLContext();
         }
     }
-
 }
